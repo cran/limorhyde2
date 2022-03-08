@@ -1,0 +1,86 @@
+---
+title: "Analyzing RNA-seq data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Analyzing RNA-seq data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  fig.align = 'center',
+  fig.retina = 2,
+  eval = FALSE)
+
+foreach::registerDoSEQ()
+```
+
+## Introduction
+
+Here we show two options for using `limorhyde2` to analyze RNA-seq data: [limma-voom](https://bioconductor.org/packages/release/bioc/html/limma.html) and [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). The two approaches give very similar results.
+
+This vignette assumes you are starting with the output of [tximport](https://bioconductor.org/packages/release/bioc/html/tximport.html).
+
+## Load the data
+
+You will need two objects:
+
+1. `txi`, a list from `tximport`
+2. `metadata`, a `data.frame` having one row per sample
+
+The rows in `metadata` must correspond to the columns of the elements of `txi`.
+
+```{r}
+library('limorhyde2')
+# txi = ?
+# metadata = ?
+```
+
+## Filter out lowly expressed genes
+
+There are many reasonable strategies to do this, here is one.
+
+```{r}
+keep = rowSums(edgeR::cpm(txi$counts) >= 0.5) / ncol(txi$counts) >= 0.75
+
+txiKeep = txi
+for (name in c('counts', 'length')) {
+  txiKeep[[name]] = txi[[name]][keep, ]}
+```
+
+## Fill in counts for sample-gene pairs having zero counts
+
+This avoids unrealistically low log2 CPM values and thus artificially inflated effect size estimates.
+
+```{r}
+for (i in 1:nrow(txiKeep$counts)) {
+  idx = txiKeep$counts[i, ] > 0
+  txiKeep$counts[i, !idx] = min(txiKeep$counts[i, idx])}
+```
+
+## Option 1: limma-voom
+
+```{r}
+y = edgeR::DGEList(txiKeep$counts)
+y = edgeR::calcNormFactors(y)
+
+fit = getModelFit(y, metadata, ..., method = 'voom') # replace '...' as appropriate for your data
+```
+
+## Option 2: DESeq2
+
+The second and third arguments to `DESeqDataSetFromTxImport()` are required, but will not be used by `limorhyde2`.
+
+```{r}
+y = DESeq2::DESeqDataSetFromTximport(txiKeep, metadata, ~1)
+
+fit = getModelFit(y, metadata, ..., method = 'deseq2') # replace '...' as appropriate for your data
+```
+
+## Continue using `limorhyde2`
+
+Regardless of which option you choose, the next steps are the same: `getPosteriorFit()`, `getRhythmStats()`, etc.
