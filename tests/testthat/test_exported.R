@@ -4,7 +4,7 @@ m = GSE34018$metadata
 m = rbind(m, m[seq(1, .N, 2)])
 m[(.N / 3 * 2 + 1):.N, cond := 'synthetic']
 y = y[, m$sample]
-m[, sample := paste0(sample, '_', 1:.N)]
+m[, sample := paste0(sample, '_', seq_len(.N))]
 colnames(y) = m$sample
 
 timeColname = 'time_test'
@@ -23,29 +23,31 @@ test_that('getModelFit', {
   nKnots = 3L
 
   id = 1
-  fitObs = getModelFit(y, m, period, nKnots, timeColname, keepLmFits = TRUE)
+  fitObs = getModelFit(
+    y, m, period, nKnots, timeColname = timeColname, keepLmFits = TRUE)
   fitExp = snapshot(fitObs, file.path(dataDir, glue('model_fit_{id}.qs')))
   expect_equal(fitObs, fitExp)
 
   id = 2
-  fitObs = getModelFit(y, m, period, nKnots, timeColname, condColname)
+  fitObs = getModelFit(
+    y, m, period, nKnots, timeColname = timeColname, condColname = condColname)
   fitExp = snapshot(fitObs, file.path(dataDir, glue('model_fit_{id}.qs')))
   expect_equal(fitObs, fitExp)
 
   id = 3
   fitObs = getModelFit(
-    y, m, period, nKnots, timeColname, condColname, covarColnames = 'batch')
+    y, m, period, nKnots, timeColname = timeColname, condColname = condColname,
+    covarColnames = 'batch')
   fitExp = snapshot(fitObs, file.path(dataDir, glue('model_fit_{id}.qs')))
   expect_equal(fitObs, fitExp)
 
   id = 4
-  fitObs = getModelFit(y, m, period, nKnots = NULL, timeColname = timeColname)
+  fitObs = getModelFit(y, m, period, sinusoid = TRUE, timeColname = timeColname)
   fitExp = snapshot(fitObs, file.path(dataDir, glue('model_fit_{id}.qs')))
   expect_equal(fitObs, fitExp)
 
-  expect_error(getModelFit(y, m[-1L], period, nKnots, timeColname))
-  expect_error(getModelFit(y, m, -1, nKnots, timeColname))
-  expect_error(getModelFit(y, m, period, 2L, timeColname))
+  expect_error(getModelFit(y, m[-1L], period, nKnots, timeColname = timeColname))
+  expect_error(getModelFit(y, m, -1, nKnots, timeColname = timeColname))
   expect_error(getModelFit(y, m, period, nKnots))
 })
 
@@ -215,7 +217,7 @@ test_that('mergeMeasMeta', {
 
   y = matrix(1:8, ncol = nSamps)
   colnames(y) = metadata[[sampleColname]]
-  rownames(y) = paste0('feature_', 1:nrow(y))
+  rownames(y) = paste0('feature_', seq_len(nrow(y)))
 
   dObs = mergeMeasMeta(
     y, metadata, features = rownames(y)[1L], sampleColname = sampleColname)

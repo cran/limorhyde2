@@ -1,7 +1,7 @@
 ## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = '#>',
   message = FALSE,
   fig.align = 'center',
   fig.retina = 2,
@@ -22,7 +22,7 @@ foreach::registerDoSEQ()
 #    txiKeep[[name]] = txi[[name]][keep, ]}
 
 ## -----------------------------------------------------------------------------
-#  for (i in 1:nrow(txiKeep$counts)) {
+#  for (i in seq_len(nrow(txiKeep$counts))) {
 #    idx = txiKeep$counts[i, ] > 0
 #    txiKeep$counts[i, !idx] = min(txiKeep$counts[i, idx])}
 

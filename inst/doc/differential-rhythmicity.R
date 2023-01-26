@@ -1,7 +1,7 @@
 ## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = '#>',
   message = FALSE,
   fig.align = 'center',
   fig.retina = 2)
@@ -39,7 +39,7 @@ print(diffRhyStats[order(diff_peak_trough_amp)], nrows = 10L)
 
 ggplot(diffRhyStats) +
   geom_point(aes(x = diff_mesor, y = diff_peak_trough_amp), alpha = 0.2) +
-  labs(x = bquote(Delta*'mesor (norm.)'), y = bquote(Delta*'amplitude (norm.)'))
+  labs(x = bquote(Delta * 'mesor (norm.)'), y = bquote(Delta * 'amplitude (norm.)'))
 
 ## ----expected_meas------------------------------------------------------------
 genes = data.table(

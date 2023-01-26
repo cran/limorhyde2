@@ -1,7 +1,7 @@
 ## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = '#>',
   message = FALSE,
   fig.align = 'center',
   fig.retina = 2)
@@ -86,12 +86,12 @@ print(diffRhyStatsSamps, nrows = 10L)
 p1 = ggplot(diffRhyStatsSamps) +
   facet_wrap(vars(symbol), nrow = 1) +
   geom_point(aes(x = diff_peak_trough_amp, y = diff_mesor), alpha = 0.2) +
-  labs(x = bquote(Delta*'amplitude (norm.)'), y = bquote(Delta*'mesor (norm.)'))
+  labs(x = bquote(Delta * 'amplitude (norm.)'), y = bquote(Delta * 'mesor (norm.)'))
 
 p2 = ggplot(diffRhyStatsSamps) +
   facet_wrap(vars(symbol), nrow = 1) +
   geom_point(aes(x = diff_peak_trough_amp, y = diff_peak_phase), alpha = 0.2) +
-  labs(x = bquote(Delta*'amplitude (norm.)'), y = bquote(Delta*'phase (h)'))
+  labs(x = bquote(Delta * 'amplitude (norm.)'), y = bquote(Delta * 'phase (h)'))
 
 plot_grid(p1, p2, ncol = 1)
 

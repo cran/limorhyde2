@@ -1,7 +1,7 @@
 ## ---- include = FALSE---------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  comment = '#>',
   message = FALSE,
   fig.align = 'center',
   fig.retina = 2)

@@ -1,3 +1,25 @@
+# limorhyde2 0.1.0
+* Changed default for credible interval mass to 0.9.
+
+# limorhyde2 0.0.13
+* Fixed `getExpectedMeas()` for single condition and no covariates.
+
+# limorhyde2 0.0.12
+* Added `isAlreadyInParallel()` function that checks if you are already running something in parallel.
+* Added check to `getRhythmStats()` to prevent running in parallel if already in parallel.
+
+# limorhyde2 0.0.11
+* Fixed `mergeMeasMeta()` for RNA-seq data.
+
+# limorhyde2 0.0.10
+* Matched styling to lab standards.
+
+# limorhyde2 0.0.9
+* Enabled spline fit with fewer knots and customizable degree.
+
+# limorhyde2 0.0.8
+* Matched style to lab standard.
+
 # limorhyde2 0.0.7
 * Made data smaller and examples faster.
 

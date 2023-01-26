@@ -45,26 +45,26 @@ getExpectedMeas = function(
   data.table::setnames(mNew, c(fit$timeColname, dummyColname))
 
   mOrigCond = unique(fit$metadata[, fit$condColname, with = FALSE])
-  set(mOrigCond, j = dummyColname, value = 1)
   if (nrow(mOrigCond) > 0) {
+    set(mOrigCond, j = dummyColname, value = 1)
     mNew = merge(mNew, mOrigCond, by = dummyColname, allow.cartesian = TRUE)}
 
   # TODO: simplify numeric covariates to overall mean
   mOrigCovar = unique(fit$metadata[, fit$covarColnames, with = FALSE])
-  set(mOrigCovar, j = dummyColname, value = 1)
   if (nrow(mOrigCovar) > 0) {
+    set(mOrigCovar, j = dummyColname, value = 1)
     mNew = merge(mNew, mOrigCovar, by = dummyColname, allow.cartesian = TRUE)}
 
   mNew[, (dummyColname) := NULL]
 
   sampleColname = '_new_sample' # should be distinct from other columns
-  set(mNew, j = sampleColname, value = paste0('new_sample_', 1:nrow(mNew)))
+  set(mNew, j = sampleColname, value = paste0('new_sample_', seq_len(nrow(mNew))))
   m = getMetadata(mNew, fit$timeColname, fit$condColname, fit$covarColnames)
 
   design = foreach(shift = fit$shifts, .combine = cbind) %do% {
     mShift = data.table::copy(m)
     set(mShift, j = 'time', value = mShift$time + shift)
-    designShift = getDesign(mShift, fit$period, fit$nKnots)}
+    designShift = getDesign(mShift, fit$period, fit$nKnots, fit$degree)}
 
   reg = foreach::getDoParRegistered()
   doOp = if (dopar && reg) `%dopar%` else `%do%`
@@ -153,6 +153,7 @@ mergeMeasMeta = function(y, metadata, features = NULL, sampleColname = 'sample')
   assertDisjunct(sampleColname, c('feature', 'meas'))
   assertChoice(sampleColname, colnames(metadata))
 
+  if (!is.matrix(y)) y = as.matrix(y) # in case y is a DGEList or DESeq object
   if (!is.null(features)) y = y[features, , drop = FALSE]
 
   d = data.table(y, keep.rownames = 'feature')

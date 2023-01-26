@@ -2,7 +2,7 @@ Package: limorhyde2
 Type: Package
 Title: Quantify Rhythmicity and Differential Rhythmicity in Genomic
         Data
-Version: 0.0.7
+Version: 0.1.0
 Authors@R: c(
   person('Jake', 'Hughey', , 'jakejhughey@gmail.com', c('aut', 'cre')),
   person('Dora', 'Obodo', , 'dora.obodo@vanderbilt.edu', 'aut'),
@@ -15,7 +15,7 @@ URL: https://limorhyde2.hugheylab.org,
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: R (>= 3.6)
 Imports: abind (>= 1.4-5), ashr (>= 2.2-54), checkmate (>= 2.0.0),
         data.table (>= 1.12.8), DESeq2 (>= 1.30.0), foreach (>= 1.5.0),
@@ -27,10 +27,10 @@ Suggests: cowplot (>= 1.1.1), knitr, doParallel (>= 1.0.15), ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2022-03-03 16:00:58 UTC; joshuaschoenbachler
+Packaged: 2023-01-26 20:15:15 UTC; jakehughey
 Author: Jake Hughey [aut, cre],
   Dora Obodo [aut],
   Elliot Outland [aut]
 Maintainer: Jake Hughey <jakejhughey@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-03-08 20:20:02 UTC
+Date/Publication: 2023-01-26 20:30:02 UTC
